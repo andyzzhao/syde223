@@ -9,26 +9,35 @@
 
 using namespace std;
 
-
+// PURPOSE: Models music with artist name, year made and id 
 class Music{
     string artist_name;
     unsigned int year_made;
     string id;
-
 public:
+    // CONSTRUCTORS
+    // Default/empty constuctors for Music
     Music() : year_made(0){   
     }
 
+    //Parametric constructors for Music
     Music(string artist_name, unsigned int year_made, string id){
         artist_name = artist_name;
         year_made = year_made;
         id = id;
     }
 
+    // SERVICE FUNCTIONS
+    // PURPOSE: gets artist_name
+    // INPUTS: None
+    // RETURNS: artist_name
     string get_artist(){
         return artist_name;
     }
 
+    // PURPOSE: compares two pieces of music
+    // INPUTS: rhs - Music instance that is being compared 
+    // RETURNS: true if the two instances are the same, false otherwise
     bool operator ==(Music &rhs){
         if (artist_name == rhs.artist_name && year_made == rhs.year_made && id == rhs.id){
             return true;
@@ -39,21 +48,28 @@ public:
     }       
 };
 
-
+// Models a completed piece of music as a song, inherites attributes from Music class 
 class Song : public Music {
     unsigned int song_length;
     string genre;
     string song_name;
 
 public:
+    // CONSTRUCTORS
+    // Default/empty constructors for Song
     Song() : song_length(0){}
 
+    // Parametric constructor for Song
     Song(unsigned int song_length, string genre, string song_name){
         song_length = song_length;
         genre = genre; 
         song_name = song_name; 
     }
 
+    // SERVICE FUNCTIONS
+    // PURPOSE: compares two songs
+    // INPUTS: rhs - song instance that is being compared
+    // RETURNS: true if the two instances are the same, false otherwise 
     bool operator ==(Song &rhs){
         if (song_length == rhs.song_length && genre == rhs.genre && song_name == rhs.song_name){
             return true;
@@ -63,20 +79,30 @@ public:
         }
     }  
 
+    // PURPOSE: gets song_name
+    // INPUTS: None
+    // RETURNS: song_name
     string get_song_name () {
         return song_name;
     }
 };
 
+// PURPOSE: Models a playlist, a collection of songs 
 class Playlist{
     vector<Song> my_playlist;
 public: 
+    // CONSTRUCTORS
+    // Default/empty constructors for Playlist
     Playlist(){}
 
+    // SERVICE FUNCTIONS
+    // PURPOSE: adds a song to the playlist, duplicates not allowed
+    // INPUTS: song_info - Song instance 
+    // RETURNS: true if the song is added, false otherwise
     bool insert_song(Song &song_info){
-        int counter = 0; 
-        for (int i=0; i < my_playlist.size(); i++){
-            if(song_info.get_artist()== my_playlist.at(i).get_artist()){
+        int counter = 0; // number of times the song's artist already appears in the playlist
+        for(int i=0; i < my_playlist.size(); i++){
+            if(song_info.get_artist() == my_playlist.at(i).get_artist()){
                 counter++;
             }
 
@@ -89,6 +115,9 @@ public:
         return true; 
     }
 
+    // PURPOSE: shuffles songs in a playlist
+    // INPUTS: None
+    // RETURNS: new playlist with the songs rearranged 
     Playlist shuffle_song(){
         Playlist my_new_playlist;
         int vector_size = my_playlist.size();
@@ -110,21 +139,21 @@ public:
         return my_new_playlist; 
     }
 
-    // friend Playlist operator+(const Playlist& target1, const Playlist& target2){
-    //     Playlist new_playlist;
-    //     new_playlist.my_playlist.insert(my_playlist.end(), target1.my_playlist.begin(), target1.my_playlist.end());
-    //     new_playlist.my_playlist.insert(my_playlist.end(), target2.my_playlist.begin(), target2.my_playlist.end());
-    //     return new_playlist;
-    // }
-
-    friend Playlist operator+(const Playlist& target){
-        Playlist new_playlist;
-        new_playlist.my_playlist.insert(my_playlist.end(), target1.my_playlist.begin(), target1.my_playlist.end());
-        new_playlist.my_playlist.insert(my_playlist.end(), target2.my_playlist.begin(), target2.my_playlist.end());
-        return new_playlist;
-    }
+    // PURPOSE: combines two playlist together 
+    // INPUTS: target1 - Playlist instance
+    //         target2 - Playlist instance
+    // RETURNS: a Playlist with songs from target1 and target2
+    friend Playlist operator+(const Playlist& target1, const Playlist& target2);
 };
 
+Playlist operator+(const Playlist& target1, const Playlist& target2){
+    Playlist new_playlist;
+    new_playlist.my_playlist.insert(new_playlist.my_playlist.end(), target1.my_playlist.begin(), target1.my_playlist.end());
+    new_playlist.my_playlist.insert(new_playlist.my_playlist.end(), target2.my_playlist.begin(), target2.my_playlist.end());
+    return new_playlist;
+}
+
+// driver function, used to test song insertion 
 void test_insert_songs() {
     Playlist my_new_playlist;
     Song first_song = Song(10, "rock", "we will rock you");
