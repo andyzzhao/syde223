@@ -85,6 +85,7 @@ public:
             }
         }
         my_playlist.push_back(song_info);
+        cout << "Adding song" << endl;
         return true; 
     }
 
@@ -109,12 +110,12 @@ public:
         return my_new_playlist; 
     }
 
-    friend Playlist operator+(const Playlist& target1, const Playlist& target2){
-        Playlist new_playlist;
-        new_playlist.my_playlist.insert(my_playlist.end(), target1.my_playlist.begin(), target1.my_playlist.end());
-        new_playlist.my_playlist.insert(my_playlist.end(), target2.my_playlist.begin(), target2.my_playlist.end());
-        return new_playlist;
-    }
+    // friend Playlist operator+(const Playlist& target1, const Playlist& target2){
+    //     Playlist new_playlist;
+    //     new_playlist.my_playlist.insert(my_playlist.end(), target1.my_playlist.begin(), target1.my_playlist.end());
+    //     new_playlist.my_playlist.insert(my_playlist.end(), target2.my_playlist.begin(), target2.my_playlist.end());
+    //     return new_playlist;
+    // }
 };
 
 void test_insert_songs() {
