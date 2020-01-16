@@ -229,9 +229,9 @@ void test_shuffle_songs(Playlist my_new_playlist){
     my_new_playlist = my_new_playlist.shuffle_song();
 
     if (playlist_copy == my_new_playlist) {
-        cout << "true" << endl;
+        cout << "Shuffled playlist is the same" << endl;
     } else {
-        cout << "false" << endl;
+        cout << "Playlist shuffled" << endl;
     }
     
     assert(!(playlist_copy == my_new_playlist));
