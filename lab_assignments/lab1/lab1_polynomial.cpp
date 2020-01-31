@@ -50,6 +50,9 @@ Polynomial::~Polynomial() {
 // Operators
 bool Polynomial::operator==(const Polynomial& target) {
     bool isEqual = true;
+    if (data.size() == 0 && target.get_data().size() == 0) {
+        return true;
+    }
     for (int i = 0; i < data.size(); i++) {
         if (target.get_data().at(i) == data.at(i)) {
             isEqual = isEqual && true;
@@ -92,16 +95,10 @@ Polynomial Polynomial::operator*(const Polynomial& target) {
     vector<int> new_poly_array;
 
     // fill new array with zeros
-    for (int i = 0; i < (data.size() + target.get_data().size() + 1); i++){
+    for (int i = 0; i < (data.size() + target.get_data().size() - 1); i++){
         new_poly_array.push_back(0);
     }
-    // [5,3,1x^2] 
-    // [10,8,6x^2] 
-    // [0,0,0,0,0,0]
-    // [50,40,30,0,0,0]
-    // [50,30+40,30+24,18,0,0]
-    // [50,70,30+24+10,18+8,6]
-
+    
     for (int i = 0; i < data.size(); i++) {
         for (int j = 0; j < target.get_data().size(); j++){
             new_poly_array.at(i+j) = new_poly_array.at(i+j) + (data.at(i) * target.get_data().at(j));
@@ -200,7 +197,7 @@ bool PolynomialTest::test_constructor2() {
         return true;
     } else {
         for (int i = 0; i < poly1.get_data().size(); i++) {
-            if (poly1.get_data().at(i) == poly2.get_data.at(i)) {
+            if (poly1.get_data().at(i) == poly2.get_data().at(i)) {
                 passTests = passTests && true;
             } else {
                 return true;
@@ -212,16 +209,86 @@ bool PolynomialTest::test_constructor2() {
 }
 
 bool PolynomialTest::test_constructor3() {
+    bool passTests = true;
 
+    Polynomial poly1 = Polynomial("test.txt");
+    Polynomial poly2 = Polynomial("test2.txt");
+    Polynomial poly3 = Polynomial("test3.txt");
+
+    vector<int> array1 = {5, -2, 3, 0, 1, 4};
+    vector<int> array2 = {5, -10, 0, 0, 1, 4, 2, -1, -9};
+    vector<int> array3 = {7, 3, 4, 23, 7, 436, -111, 52, 3, 3};
+
+    for (int i = 0; i < array1.size(); i++) {
+        if (poly1.get_data().at(i) == array1.at(i)) {
+            passTests = passTests && true;
+        } else {
+            return false;
+        }
+    }
+
+    for (int i = 0; i < array2.size(); i++) {
+        if (poly2.get_data().at(i) == array2.at(i)) {
+            passTests = passTests && true;
+        } else {
+            return false;
+        }
+    }
+
+    for (int i = 0; i < array3.size(); i++) {
+        if (poly3.get_data().at(i) == array3.at(i)) {
+            passTests = passTests && true;
+        } else {
+            return false;
+        }
+    }
 }
 
 // operator tests
 bool PolynomialTest::test_operator1() {
+    int array1[] = {1, 2, 10, -10, -100, 100};
+    int array2[] = {55, 20, 33, 23, 892, 1000};
+    int array3[] = {};
 
+    int size1 = 6;
+    int size2 = 6;
+    int size3 = 0;
+
+    Polynomial poly1 = Polynomial(array1, size1);
+    Polynomial poly1_check = Polynomial(array1, size1);
+    Polynomial poly2 = Polynomial(array2, size2);
+    Polynomial poly2_check = Polynomial(array2, size2);
+    Polynomial poly3 = Polynomial(array3, size3);
+    Polynomial poly3_check = Polynomial(array3, size3);
+
+    if (poly1 == poly1_check && poly2 == poly2_check && poly3 == poly3_check) {
+        return true;
+    }
+    return false;
 }
 
 bool PolynomialTest::test_operator2() {
+    int array1[] = {1, 2, 3, 4, 5, 6};
+    int array2[] = {4, 5, 6, 7, 8, -100};
+    int array3[] = {50};
 
+    int array1_check[] = {5, 7, 9, 11, 13, -94};
+    int array2_check[] = {5, 7, 9, 11, 13, -94};
+    int array3_check[] = {5, 7, 9, 11, 13, -94};
+
+    int size1 = 6;
+    int size2 = 6;
+    int size3 = 1;
+
+    Polynomial poly1 = Polynomial(array1, size1);
+    Polynomial poly2 = Polynomial(array2, size2);
+    Polynomial poly3 = Polynomial(array3, size3);
+
+    Polynomial poly1_check = poly1 + poly2;
+    Polynomial poly2_check = poly1 + poly3;
+    Polynomial poly3_check = poly2 + poly3;
+
+    
 }
 
 bool PolynomialTest::test_operator3() {
