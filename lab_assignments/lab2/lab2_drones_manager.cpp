@@ -1,5 +1,5 @@
 #include "lab2_drones_manager.hpp"
-
+#include <iostream>
 // TODO: Implement all of the listed functions below
 
 DronesManager::DronesManager() {
@@ -39,20 +39,56 @@ bool DronesManager::empty() const {
 }
 
 DronesManager::DroneRecord DronesManager::select(unsigned int index) const {
-	for (int i = 0; i < get_size(); i++) {
-		if (i == index) {
-			
+	if (get_size() > 0) {
+		DroneRecord* node_ptr = first;
+
+		for (int i = 0; i < get_size(); i++) {
+			if (i == index) {
+				return *node_ptr;
+			}
+			if (node_ptr->next == NULL) {
+				return *node_ptr;
+			}
+			node_ptr = node_ptr->next;
 		}
 	}
-
 	return DroneRecord();
 }
 
 unsigned int DronesManager::search(DroneRecord value) const {
+	if (get_size() > 0) {
+		DroneRecord* node_ptr = first;
+
+		for (int i = 0; i < get_size(); i++) {
+			if (*node_ptr == value) {
+				return i;
+			}
+			if (node_ptr->next == NULL) {
+				return i;
+			}
+			node_ptr = node_ptr->next;
+		}
+	}
+
 	return 0;
 }
 
 void DronesManager::print() const {
+	if (get_size() > 0) {
+		DroneRecord* node_ptr = first;
+		for (int i = 0; i < get_size(); i++) {
+			cout << endl;
+			cout << "Drone Record No: " << i;
+			cout << "Description: " << node_ptr->description << endl;
+			cout << "Manufacturer: " << node_ptr->manufacturer << endl;
+			cout << "Battery Type: " << node_ptr->batteryType << endl;
+			cout << "Drone Type: " << node_ptr->droneType << endl;
+			cout << "Drone ID: " << node_ptr->droneID << endl;
+			cout << "Range: " << node_ptr->range << endl;
+			cout << "Year Bought: " << node_ptr->yearBought << endl;
+			node_ptr = node_ptr->next;
+		}
+	}
 }
 
 bool DronesManager::insert(DroneRecord value, unsigned int index) {
@@ -60,6 +96,8 @@ bool DronesManager::insert(DroneRecord value, unsigned int index) {
 }
 
 bool DronesManager::insert_front(DroneRecord value) {
+	
+
 	return false;
 }
 
