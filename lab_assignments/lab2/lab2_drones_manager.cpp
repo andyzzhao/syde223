@@ -96,16 +96,28 @@ bool DronesManager::insert(DroneRecord value, unsigned int index) {
 }
 
 bool DronesManager::insert_front(DroneRecord value) {
-	
+	DroneRecord *node_ptr = new DroneRecord(value);
+	value.prev = NULL;
+	value.next = first;
+	first->prev = node_ptr;
+	first = node_ptr;
 
 	return false;
 }
 
 bool DronesManager::insert_back(DroneRecord value) {
+	DroneRecord *node_ptr = new DroneRecord(value);
+	value.prev = last;
+	value.next = NULL;
+	last->prev = node_ptr;
+	last = node_ptr;
+
 	return false;
 }
 
 bool DronesManager::remove(unsigned int index) {
+	
+
 	return false;
 }
 
