@@ -46,9 +46,6 @@ DronesManager::DroneRecord DronesManager::select(unsigned int index) const {
 			if (i == index) {
 				return *node_ptr;
 			}
-			if (node_ptr->next == NULL) {
-				return *node_ptr;
-			}
 			node_ptr = node_ptr->next;
 		}
 	}
@@ -92,6 +89,21 @@ void DronesManager::print() const {
 }
 
 bool DronesManager::insert(DroneRecord value, unsigned int index) {
+	DroneRecord *node_ptr = new DroneRecord(value);
+
+	if(get_size() > index){
+		DroneRecord* node_ptr = first;
+
+		for(int i = 0; i < get_size(); i++){
+			node_ptr = node_ptr->next;
+			
+			if (i == index) {
+				node_ptr->next
+				*node_ptr = value;
+			}
+		}
+	}
+	
 	return false;
 }
 
@@ -101,6 +113,11 @@ bool DronesManager::insert_front(DroneRecord value) {
 	value.next = first;
 	first->prev = node_ptr;
 	first = node_ptr;
+	size++;
+
+	if (size == 1) {
+		last = node_ptr;
+	}
 
 	return false;
 }
@@ -111,21 +128,83 @@ bool DronesManager::insert_back(DroneRecord value) {
 	value.next = NULL;
 	last->prev = node_ptr;
 	last = node_ptr;
+	size++;
+
+	if (size == 1) {
+		first = node_ptr;
+	}
 
 	return false;
 }
 
 bool DronesManager::remove(unsigned int index) {
-	
+	DroneRecord *curr_ptr = first;
+	DroneRecord *prev_ptr = first;
+	DroneRecord *next_ptr = first;
 
-	return false;
+	if (size < index) {
+		return false;
+	}
+
+	for (int i = 0; i < index; i++) {
+		curr_ptr = curr_ptr->next;
+	}
+
+	for (int i = 0; i < index - 1; i++) {
+		prev_ptr = prev_ptr->next;
+	}
+
+	for (int i = 0; i < index + 1; i++) {
+		next_ptr = next_ptr->next;
+	}
+
+	prev_ptr->next = next_ptr;
+	next_ptr->prev = prev_ptr;
+
+	curr_ptr->next = NULL;
+	curr_ptr->prev = NULL;
+	delete curr_ptr;
+	curr_ptr = NULL;
+	size--;
+
+	return true;
 }
 
 bool DronesManager::remove_front() {
-	return false;
+	DroneRecord* node_ptr = first;
+
+	if (node_ptr = NULL) {
+		return false;
+	}
+
+	first = first->next;
+	first->prev = NULL;
+
+	node_ptr->next = NULL;
+	delete node_ptr;
+	node_ptr = NULL;
+
+	size--;
+
+	return true;
 }
 
 bool DronesManager::remove_back() {
+	DroneRecord* node_ptr = last;
+
+	if (node_ptr = NULL) {
+		return false;
+	}
+
+	last = last->prev;
+	last->next = NULL;
+
+	node_ptr->prev = NULL;
+	delete node_ptr;
+	node_ptr = NULL;
+
+	size--;
+
 	return false;
 }
 
