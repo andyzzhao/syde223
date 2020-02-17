@@ -37,17 +37,23 @@ public:
 	
 	// PURPOSE: select() and search() work properly
 	bool test3() {
-		DronesManager manager1, manager2, manager3;
+		DronesManager manager1, manager2;
 		manager1.insert_front(DronesManager::DroneRecord(100));
+		manager1.insert_front(DronesManager::DroneRecord(200));
+		manager1.insert_front(DronesManager::DroneRecord(300));
+
 		manager2.insert_front(DronesManager::DroneRecord(100));
+		manager2.insert_front(DronesManager::DroneRecord(200));
+		manager2.insert_front(DronesManager::DroneRecord(300));
 
 		ASSERT_TRUE(manager1.select(0) == manager2.select(0));
-		ASSERT_TRUE(manager1.select(3) == manager1.select(0));
-		ASSERT_TRUE(manager3.select(0) == DronesManager::DroneRecord(0));
+		ASSERT_TRUE(manager1.select(1) == manager2.select(1));
+		ASSERT_TRUE(manager1.select(2) == manager2.select(2));
 
-		ASSERT_TRUE(manager1.search(100) == 0);
-		ASSERT_TRUE(manager1.search(200) == manager1.get_size());
-		ASSERT_TRUE(manager3.search(100) == 0);
+		ASSERT_TRUE(manager1.search(DronesManager::DroneRecord(300)) == 0);
+		ASSERT_TRUE(manager1.search(DronesManager::DroneRecord(200)) == 1);
+		ASSERT_TRUE(manager1.search(DronesManager::DroneRecord(100)) == 2);
+
 	    return true;
 	}
 	
@@ -78,8 +84,7 @@ public:
 		manager1.replace(2, DronesManager::DroneRecord(500));
 		manager1.replace(1, DronesManager::DroneRecord(700));
 		manager1.replace(0, DronesManager::DroneRecord(900));
-		manager1.print();
-		// manager1.reverse_list();
+		manager1.reverse_list();
 
 		ASSERT_TRUE(manager1.search(1000) == 0);
 		ASSERT_TRUE(manager1.search(500) == 1);
@@ -117,11 +122,14 @@ public:
 		manager1.insert(DronesManager::DroneRecord(10), 0);
 		manager1.insert(DronesManager::DroneRecord(20), 6);
 
-		ASSERT_TRUE(manager1.search(300) == 0);
-		ASSERT_TRUE(manager1.search(200) == 1);
-		ASSERT_TRUE(manager1.search(100) == 2);
-		ASSERT_TRUE(manager1.search(1000) == 3);
-	    return false;
+		ASSERT_TRUE(manager1.search(10) == 0);
+		ASSERT_TRUE(manager1.search(300) == 1);
+		ASSERT_TRUE(manager1.search(200) == 2);
+		ASSERT_TRUE(manager1.search(0) == 3);
+		ASSERT_TRUE(manager1.search(100) == 4);
+		ASSERT_TRUE(manager1.search(1000) == 5);
+		ASSERT_TRUE(manager1.search(20) == 6);
+	    return true;
 	}
 	
 	// PURPOSE: try to remove too many elements, then add a few elements
@@ -162,13 +170,12 @@ public:
 		manager1.insert(DronesManager::DroneRecord(20), 6);
 		manager1.insert(DronesManager::DroneRecord(30), 10);
 		manager1.insert(DronesManager::DroneRecord(400), -2);
+		manager1.remove(0);
+		manager1.remove(3);
+		manager1.remove(1);
 
-		ASSERT_TRUE(manager1.search(10) == 0);
-		ASSERT_TRUE(manager1.search(100) == 1);
-		ASSERT_TRUE(manager1.search(200) == 2);
-		ASSERT_TRUE(manager1.search(0) == 3);
-		ASSERT_TRUE(manager1.search(300) == 4);
-		ASSERT_TRUE(manager1.search(20) == 5);
+		ASSERT_TRUE(manager1.search(100) == 0);
+		ASSERT_TRUE(manager1.search(0) == 1);
 
 		ASSERT_TRUE(manager1.first != NULL);
 		ASSERT_TRUE(manager1.last != NULL);
@@ -203,9 +210,9 @@ public:
 		manager1.insert_back(DronesManager::DroneRecord(300));	
 		manager1.insert_back(DronesManager::DroneRecord(150));	
 		manager1.insert_back(DronesManager::DroneRecord(250));	
-		ASSERT_TRUE(!manager1.insert_sorted_asc(350));
+		ASSERT_TRUE(!manager1.insert_sorted_asc(DronesManager::DroneRecord(350)));
 		manager1.sort_asc();
-		ASSERT_TRUE(manager1.insert_sorted_asc(350));
+		ASSERT_TRUE(manager1.insert_sorted_asc(DronesManager::DroneRecord(350)));
 
 		return true;
 	}
@@ -218,9 +225,9 @@ public:
 		manager1.insert_back(DronesManager::DroneRecord(300));	
 		manager1.insert_back(DronesManager::DroneRecord(150));	
 		manager1.insert_back(DronesManager::DroneRecord(250));	
-		ASSERT_TRUE(!manager1.insert_sorted_desc(350));
+		ASSERT_TRUE(!manager1.insert_sorted_desc(DronesManager::DroneRecord(350)));
 		manager1.sort_desc();
-		ASSERT_TRUE(manager1.insert_sorted_desc(350));
+		ASSERT_TRUE(manager1.insert_sorted_desc(DronesManager::DroneRecord(350)));
 
 		return true;
 	}

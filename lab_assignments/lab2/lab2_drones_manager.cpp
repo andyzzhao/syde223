@@ -3,9 +3,8 @@
 // TODO: Implement all of the listed functions below
 
 DronesManager::DronesManager() {
-	DroneRecord* null_node = new DroneRecord;
-	first = null_node;
-	last = null_node;
+	first = NULL;
+	last = NULL;
 	size = 0;
 }
 
@@ -78,7 +77,7 @@ void DronesManager::print() const {
 		DroneRecord* node_ptr = first;
 		for (int i = 0; i < get_size(); i++) {
 			cout << endl;
-			cout << "Drone Record No: " << i;
+			cout << "Drone Record No: " << i << endl;
 			cout << "Description: " << node_ptr->description << endl;
 			cout << "Manufacturer: " << node_ptr->manufacturer << endl;
 			cout << "Battery Type: " << node_ptr->batteryType << endl;
@@ -102,13 +101,13 @@ bool DronesManager::insert(DroneRecord value, unsigned int index) {
 	}
 
 	// normal case: 
-	if(get_size() >=index){
+	if (get_size() >= index){
 		DroneRecord* curr_ptr = first;
 
-		for(int i = 0; i < get_size(); i++){
-			curr_ptr = curr_ptr->next;
+		for (int i = 0; i < get_size(); i++){
 			if (i == index) {
 				DroneRecord* prev_ptr = curr_ptr->prev;
+
 				curr_ptr->prev = node_ptr;  
 				prev_ptr->next = node_ptr;
 
@@ -117,6 +116,7 @@ bool DronesManager::insert(DroneRecord value, unsigned int index) {
 				size++; 
 				return true;
 			}
+			curr_ptr = curr_ptr->next;
 		}
 	}
 
@@ -170,27 +170,30 @@ bool DronesManager::remove(unsigned int index) {
 	DroneRecord *prev_ptr = first;
 	DroneRecord *next_ptr = first;
 
-	if (size < index) {
+	if (size < index || index < 0) {
 		return false;
+	}
+
+	if (index == 0) {
+		return remove_front();
+	}
+
+	if (index == size - 1) {
+		return remove_back();
 	}
 
 	for (int i = 0; i < index; i++) {
 		curr_ptr = curr_ptr->next;
 	}
-
-	for (int i = 0; i < index - 1; i++) {
-		prev_ptr = prev_ptr->next;
-	}
-
-	for (int i = 0; i < index + 1; i++) {
-		next_ptr = next_ptr->next;
-	}
+	prev_ptr = curr_ptr->prev;
+	next_ptr = curr_ptr->next;
 
 	prev_ptr->next = next_ptr;
 	next_ptr->prev = prev_ptr;
 
 	curr_ptr->next = NULL;
 	curr_ptr->prev = NULL;
+
 	delete curr_ptr;
 	curr_ptr = NULL;
 	size--;
@@ -205,6 +208,7 @@ bool DronesManager::remove_front() {
 	if (first->next == NULL) {
 		first = NULL;
 		last = NULL;
+		size--;
 		return true;
 	}
 
@@ -232,6 +236,7 @@ bool DronesManager::remove_back() {
 	if (last->prev == NULL) {
 		first = NULL;
 		last = NULL;
+		size--;
 		return true;
 	}
 
@@ -269,7 +274,7 @@ bool DronesManager::replace(unsigned int index, DroneRecord value) {
 		if (replace_node_ptr == NULL) {
 			return false;
 		}
-	}
+	} 
 
 	// Set pointers to point to new value
 	DroneRecord* prev_ptr = replace_node_ptr->prev;
@@ -288,6 +293,13 @@ bool DronesManager::replace(unsigned int index, DroneRecord value) {
 	replace_node_ptr->next = NULL;
 	replace_node_ptr->prev = NULL;
 
+	if (replace_node_ptr == first) {
+		first = new_node_ptr;
+	}
+	if (replace_node_ptr == last) {
+		last = new_node_ptr;
+	}
+
 	return true;
 }
 
@@ -304,20 +316,15 @@ bool DronesManager::reverse_list() {
 	DroneRecord* next_ptr = curr_ptr->next;
 
 	for (int i = 0; i < size; i++) {
-		cout << "Test " << i << endl;
 		if (curr_ptr != NULL) {
-			cout << "Hello1" << endl;
 			curr_ptr->next = curr_ptr->prev;
 		} else {
-			cout << "Hello2" << endl;
 			curr_ptr->next = NULL;
 		}
 
 		if (next_ptr != NULL) {
-			cout << "Hello3" << endl;
 			curr_ptr->prev = next_ptr;
 		} else {
-			cout << "Hello4" << endl;
 			curr_ptr->prev = NULL;
 		}
 
@@ -352,7 +359,7 @@ bool DronesManagerSorted::is_sorted_asc() const {
 
 bool DronesManagerSorted::is_sorted_desc() const {
 	DroneRecord* curr_ptr = first;
-	int prev_value = 0;
+	int prev_value = first->droneID;
 
 	for (int i = 0; i < size; i++) {
 		if (curr_ptr->droneID > prev_value) {
@@ -363,7 +370,6 @@ bool DronesManagerSorted::is_sorted_desc() const {
 	}
 
 	return true;
-
 }
 
 bool DronesManagerSorted::insert_sorted_asc(DroneRecord val) {
@@ -430,12 +436,17 @@ bool DronesManagerSorted::insert_sorted_desc(DroneRecord val) {
 		return false;
 	}
 
+	if (new_node->droneID > first->droneID) {
+		return insert_front(val);
+	}
+
 	DroneRecord* curr_node = first;
 	DroneRecord* prev_node = NULL;
 
 	if (curr_node == NULL) {
 		return insert_front(val);
 	}
+	
 	
 	for (int i = 0; i < size; i++) {
 
