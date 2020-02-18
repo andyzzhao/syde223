@@ -253,7 +253,7 @@ bool DronesManager::remove_back() {
 
 	size--;
 
-	return false;
+	return true;
 }
 
 bool DronesManager::replace(unsigned int index, DroneRecord value) {
@@ -387,6 +387,10 @@ bool DronesManagerSorted::insert_sorted_asc(DroneRecord val) {
 		return false;
 	}
 
+	if (new_node->droneID < first->droneID) {
+		return insert_front(val);
+	}
+
 	DroneRecord* curr_node = first;
 	DroneRecord* prev_node = NULL;
 
@@ -485,15 +489,12 @@ void DronesManagerSorted::sort_asc() {
         return; 
 	}
 
-    do
-    { 
+    do{ 
         swapped = 0; 
         cur_ptr = first; 
    
-        while (cur_ptr->next != last_ptr) 
-        { 
-            if (cur_ptr->droneID > cur_ptr->next->droneID) 
-            {  
+        while (cur_ptr->next != last_ptr){ 
+            if (cur_ptr->droneID > cur_ptr->next->droneID){  
                 swap(cur_ptr->droneID, cur_ptr->next->droneID); 
                 swapped = 1; 
             }
@@ -514,15 +515,12 @@ void DronesManagerSorted::sort_desc() {
         return; 
 	}
 
-    do
-    { 
+    do{ 
         swapped = 0; 
         cur_ptr = first; 
    
-        while (cur_ptr->next != last_ptr) 
-        { 
-            if (cur_ptr->droneID < cur_ptr->next->droneID) 
-            {  
+        while (cur_ptr->next != last_ptr){ 
+            if (cur_ptr->droneID < cur_ptr->next->droneID) {  
                 swap(cur_ptr->droneID, cur_ptr->next->droneID); 
                 swapped = 1; 
             }
