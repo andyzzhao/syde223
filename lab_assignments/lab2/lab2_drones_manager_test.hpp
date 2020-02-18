@@ -269,6 +269,13 @@ public:
 		ASSERT_TRUE(manager1.get_size() == 8);	
 		ASSERT_TRUE(manager1.is_sorted_asc()); 
 
+		ASSERT_TRUE(manager1.remove(7)); // remove from end
+		ASSERT_TRUE(manager1.remove(0)); // remove from front
+		ASSERT_TRUE(manager1.remove(2)); // remove from middle
+		ASSERT_FALSE(manager1.remove(5)) // invalid
+		ASSERT_TRUE(manager1.get_size() == 5);	
+		ASSERT_TRUE(manager1.is_sorted_asc());
+
 		return true;
 	}
 	
@@ -301,6 +308,13 @@ public:
 
 		ASSERT_TRUE(manager1.get_size() == 8);	
 		ASSERT_TRUE(manager1.is_sorted_desc()); 
+
+		ASSERT_TRUE(manager1.remove(7)); // remove from end
+		ASSERT_TRUE(manager1.remove(0)); // remove from front
+		ASSERT_TRUE(manager1.remove(2)); // remove from middle
+		ASSERT_FALSE(manager1.remove(5)) // invalid
+		ASSERT_TRUE(manager1.get_size() == 5);	
+		ASSERT_TRUE(manager1.is_sorted_desc());
 
 		return true;
 	}

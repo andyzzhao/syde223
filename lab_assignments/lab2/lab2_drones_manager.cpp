@@ -170,7 +170,7 @@ bool DronesManager::remove(unsigned int index) {
 	DroneRecord *prev_ptr = first;
 	DroneRecord *next_ptr = first;
 
-	if (size < index || index < 0) {
+	if (size <= index || index < 0) {
 		return false;
 	}
 
