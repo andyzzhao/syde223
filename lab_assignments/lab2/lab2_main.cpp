@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "lab2_drones_manager_test.hpp"
+// #include "lab2_drones_manager_test.hpp"
+#include "lab2_drones_manager_test [grading-syde-all].hpp"
 
 using namespace std;
 
