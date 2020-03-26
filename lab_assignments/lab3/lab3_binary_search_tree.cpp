@@ -221,11 +221,13 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
         // Move to next node
         // Move right
         if (val.priority > curr_node->priority) {
+            cout << "MOVE RIGHT" << endl;
             parent = curr_node;
             curr_node = curr_node->right;
         }
         // Move left
         else if (val.priority < curr_node->priority) {
+            cout << "MOVE LEFT" << endl;
             parent = curr_node;
             curr_node = curr_node->left;
         }
@@ -238,16 +240,18 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
         // GENERAL CASES:
         // Found node to be removed (curr_node)
         if (val.priority == curr_node->priority) {
-            cout << "REMOVING: " << curr_node->priority << endl;
             // Case where curr_node has no children
             if (curr_node->left==NULL && curr_node->right==NULL) {
                 cout << curr_node->priority<<" HAS NO CHILDREN" << endl;
+                cout << "PARENT: " << parent << endl;
                 if (parent->left == curr_node) {
+                    cout << "REMOVING: " << parent->left->priority << endl;
                     delete parent->left;
                     parent->left = NULL;
                     curr_node = NULL; // curr_node needs to be NULL because it pointed to a dynamically allocated TaskItem that has been deallocated (delete parent->left)
                 }
                 else if (parent->right == curr_node) {
+                    cout << "REMOVING: " << parent->right->priority << endl;
                     delete parent->right;
                     parent->right = NULL;
                     curr_node = NULL; 
@@ -264,9 +268,9 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
                 // EDGE CASE where the right tree of curr_node has no children
                     // replace curr_node with curr_node->right 
                 if(min == NULL){
+                    cout << "REMOVING: " << curr_node->priority<<" AND REPLACING WITH "<<curr_node->right->priority << endl;
                     curr_node->priority = curr_node->right->priority;
                     curr_node->description = curr_node->right->description;
-
                     delete curr_node->right;
                     curr_node->right = NULL;
                     size--;
@@ -277,7 +281,8 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
                 while(min->left != NULL){
                     min_parent = min;
                     min = min->left;
-                }  
+                }
+                cout << "REMOVING: " << curr_node->priority<<" AND REPLACING WITH "<<curr_node->right->priority << endl;
                 curr_node->priority = min->priority;
                 curr_node->description = min->description;
 
@@ -289,23 +294,28 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
             }
             // Case where curr_node has one child
             else {
-                cout << curr_node->priority<<" HAS ONE CHILD" << endl;
                 // curr_node has a left child
                 if(curr_node->left){
+                    cout << curr_node->priority<<" HAS ONE LEFT CHILD" << endl;
                     if(curr_node == parent->right){
+                        cout << "REMOVING: " << parent->right->priority<<" AND REPLACING WITH "<<curr_node->left->priority << endl;
                         parent->right = curr_node->left;
                     }
                     else if(curr_node == parent->left){
+                        cout << "REMOVING: " << parent->left->priority<<" AND REPLACING WITH "<<curr_node->left->priority << endl;
                         parent->left = curr_node->left;
                     }
                 }
                 // curr_node has a right child
                 else if(curr_node->right){
+                    cout << curr_node->priority<<" HAS ONE RIGHT CHILD" << endl;
                     if(curr_node == parent->right){
+                        cout << "REMOVING: " << parent->right->priority<<" AND REPLACING WITH "<<curr_node->right->priority << endl;
                         parent->right = curr_node->right;
                     }
-                    else if(curr_node == parent->right){
-                        parent->right = curr_node->right;
+                    else if(curr_node == parent->left){
+                        cout << "REMOVING: " << parent->left->priority<<" AND REPLACING WITH "<<curr_node->right->priority << endl;
+                        parent->left = curr_node->right;
                     }
                 }
                 delete curr_node;
