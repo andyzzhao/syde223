@@ -192,25 +192,27 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
     }
     // Case where tree has only one node
     else if (size == 1 && root) {
-        cout <<"TREE ONLY HAS ONE NODE" << endl;
+        cout <<"TREE ONLY HAS ONE NODE. REMOVING: "<< root->priority << endl;
         delete root;
         root = NULL;
         size--;
+        cout << "SIZE: " << size << endl;
         return true;
     }
     // Case where root node only has one child
-    else if (val.priority == root->priority && !(curr_node->left) != !(curr_node->right)) {
-        cout <<"root node only has one child" << endl;
-        parent = root;
+    else if (val.priority == root->priority && !(root->left) != !(root->right)) {
+        cout <<"ROOT NODE HAS ONE CHILD. REMOVING: " << curr_node->priority<< endl;
+        TaskItem* temp = root;
         if (curr_node->right) {
             root = curr_node->right;
         }
         else if (curr_node->left) {
             root = curr_node->left;
         }
-        delete parent;
-        parent = NULL;
+        delete temp;
+        temp = NULL;
         size--;
+        cout << "SIZE: " << size << endl;
         return true;
     }
 
@@ -227,6 +229,7 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
             parent = curr_node;
             curr_node = curr_node->left;
         }
+        
         // Reached a NULL node
         if(!(curr_node)){
             break;
@@ -235,10 +238,10 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
         // GENERAL CASES:
         // Found node to be removed (curr_node)
         if (val.priority == curr_node->priority) {
+            cout << "REMOVING: " << curr_node->priority << endl;
             // Case where curr_node has no children
             if (curr_node->left==NULL && curr_node->right==NULL) {
-                cout <<"CURR_NODE HAS NO CHILDREN" << endl;
-                cout << "SIZE: " << size << endl;
+                cout << curr_node->priority<<" HAS NO CHILDREN" << endl;
                 if (parent->left == curr_node) {
                     delete parent->left;
                     parent->left = NULL;
@@ -250,13 +253,14 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
                     curr_node = NULL; 
                 }
                 size--;
+                cout << "SIZE: " << size << endl;
                 return true;
             }
             // Case where curr_node has both children
             else if(curr_node->left && curr_node->right){
                 TaskItem *min = curr_node->right->left;
                 TaskItem *min_parent = curr_node->right;
-                
+                cout << curr_node->priority<<" HAS BOTH CHILDREN" << endl;
                 // EDGE CASE where the right tree of curr_node has no children
                     // replace curr_node with curr_node->right 
                 if(min == NULL){
@@ -280,10 +284,12 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
                 delete min_parent->left;
                 min_parent->left = NULL;
                 size--;
+                cout << "SIZE: " << size << endl;
                 return true;
             }
             // Case where curr_node has one child
             else {
+                cout << curr_node->priority<<" HAS ONE CHILD" << endl;
                 // curr_node has a left child
                 if(curr_node->left){
                     if(curr_node == parent->right){
@@ -305,6 +311,7 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
                 delete curr_node;
                 curr_node = NULL;
                 size--;
+                cout << "SIZE: " << size << endl;
                 return true;
             }
         }
