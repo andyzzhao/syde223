@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stack>
 #include "lab3_binary_search_tree.hpp"
 
 using namespace std;
@@ -64,24 +63,37 @@ void BinarySearchTree::print() const {
 		return;
 	}
 
-	stack <TaskItem*> s;
-	s.push(root);
+    TaskItem* curr_node = root;
+    TaskItem* pre_node;
 
-	while (s.empty() == false) {
-		TaskItem* curr_node = s.top();
-		cout << "Priority: " << curr_node->priority << endl;
-		cout << "Description: " << curr_node->description << endl;
-		cout << endl;
-		s.pop();
+    while (curr_node != NULL) {
+        if (curr_node->left == NULL) {
+            cout << "Priority: " << curr_node->priority << endl;
+            cout << "Description: " << curr_node->description << endl;
+            cout << endl;
 
-		if (curr_node->right) {
-			s.push(curr_node->right);
-		}
-		
-		if (curr_node->left) {
-			s.push(curr_node->left);
-		}
-	}
+            curr_node = curr_node->right;
+        } else {
+            pre_node = curr_node->left;
+
+            while (pre_node->right != NULL && pre_node->right != curr_node) {
+                pre_node = pre_node->right;
+            }
+
+            if (pre_node->right == NULL) {
+                pre_node->right = curr_node;
+                curr_node = curr_node->left;
+            } else {
+                pre_node->right = NULL;
+
+                cout << "Priority: " << curr_node->priority << endl;
+                cout << "Description: " << curr_node->description << endl;
+                cout << endl;
+
+                curr_node = curr_node->right;
+            }
+        }
+    }
 }
 
 // PURPOSE: Returns true if a node with the value val exists in the tree	

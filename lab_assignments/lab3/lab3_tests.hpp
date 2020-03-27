@@ -249,7 +249,6 @@ public:
 		ASSERT_TRUE(bst.insert(BinarySearchTree::TaskItem(200, "yeet")));
 
 		ASSERT_TRUE(bst.remove(BinarySearchTree::TaskItem(20, "yeet")));
-		//bst.print();
 		ASSERT_TRUE(bst.remove(BinarySearchTree::TaskItem(11, "yeet")));
 		ASSERT_TRUE(bst.remove(BinarySearchTree::TaskItem(3, "yeet")));
 		ASSERT_TRUE(bst.remove(BinarySearchTree::TaskItem(-3, "yeet")));
