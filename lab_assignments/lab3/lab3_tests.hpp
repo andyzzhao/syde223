@@ -235,9 +235,6 @@ public:
 
 	// PURPOSE: Tests lots of inserts and removes
 	bool test8() {
-		cout << endl;
-		cout << endl;
-		cout << "TEST 8 STARTS HERE" << endl;
 		BinarySearchTree bst;
 		ASSERT_TRUE(bst.insert(BinarySearchTree::TaskItem(20, "yeet")));
 		ASSERT_TRUE(bst.insert(BinarySearchTree::TaskItem(11, "yeet")));
