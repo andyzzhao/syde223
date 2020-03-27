@@ -350,6 +350,5 @@ bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
     }
 
     // loop exited, node not found
-    //
     return false;
 }
