@@ -176,124 +176,164 @@ bool BinarySearchTree::insert( BinarySearchTree::TaskItem val ) {
     return true;
 }
 
-// PURPOSE: Removes the node with the value val from the tree
-// returns true if successful; returns false otherwise
-bool BinarySearchTree::remove( BinarySearchTree::TaskItem val ) {
-	TaskItem* cur_root = root; 
-	TaskItem* right_node = root->right; 
-	TaskItem* left_node = root->left; 
-	bool found = false;
-	// if empty tree
-	if(root == NULL){
-		return false;
-	}
+bool BinarySearchTree::remove(BinarySearchTree::TaskItem val ) {
+	TaskItem* curr_node = root; // pointer to the current node we are evaluating
+    TaskItem* parent = NULL; // parent of curr_node
 
-	while(!found){
-		if(val == *cur_root){
-			delete cur_root;
-			cur_root = NULL;
-			root = NULL;
-			size--;
-			return true;
-		}
-		// found the node to be removed to the right
-		if(*right_node == val){
-			// If right_node is a leaf node
-			if(right_node->right==NULL && right_node->left==NULL){
-				delete right_node;
-				right_node = NULL;
-				cur_root->right = NULL;
-				size--;
-				return true;
-			}// If right_node has one child
-			else if(right_node->right==NULL || right_node->left==NULL){
-				if(right_node->right==NULL){
-					cur_root->right = right_node->left;
-					delete right_node;
-					size--;
-					return true;
-				}else if(right_node->left==NULL){
-					cur_root->right = right_node->right;
-					delete right_node;
-					right_node = NULL;
-					size--;
-					return true;
-				}
-			}// If right_node has two children 
-			else if(right_node->right && right_node->left){
-				// find min in right tree 
-				TaskItem* min_node = right_node->right;
-				TaskItem* before_min_node = right_node->right;
-				while (min_node->left->left != NULL) {
-					before_min_node = min_node->left;
-					min_node = min_node->left->left;
-				}
-				before_min_node->left = NULL;
-				min_node->right = right_node->right;
-				min_node->left = right_node->left;
-				cur_root->right = min_node;
-				delete right_node;
-				right_node = NULL;
-				size--;
-				return true;
-			}
-			
-		}
-		// found the node to be removed to the left
-		else if(*left_node == val){
-			// If left_node is a leaf node
-			if(left_node->right==NULL && left_node->left==NULL){
-				delete left_node;
-				left_node = NULL;
-				cur_root->right = NULL;
-				size--;
-				return true;
-			}// If left_node has one child
-			else if(left_node->right==NULL || left_node->left==NULL){
-				if(left_node->right==NULL){
-					cur_root->right = left_node->left;
-					delete left_node;
-					left_node = NULL;
-					size--;
-					return true;
-				}else if(left_node->left==NULL){
-					cur_root->right = left_node->right;
-					delete left_node;
-					size--;
-					return true;
-				}
-			}// If left_node has two children 
-			else if(left_node->right && left_node->left){
-				// find min in right tree 
-				TaskItem* min_node = left_node->right;
-				TaskItem* before_min_node = left_node->right;
-				while (min_node->left->left != NULL) {
-					before_min_node = min_node->left;
-					min_node = min_node->left->left;
-				}
-				before_min_node->left = NULL;
-				min_node->right = left_node->right;
-				min_node->left = left_node->left;
-				cur_root->right = min_node;
-				delete left_node;
-				left_node = NULL;
-				size--;
-				return true;
-			}
-		}
+    // EDGE CASES:
+	// Case where tree is empty
+    if (root == NULL) {
+        //cout <<"TREE IS EMPTY" << endl;
+        return false;
+    }
+    // Case where value already exist 
+	else if(!exists(val)){
+        return false;
+    }
+    // Case where tree has only one node
+    else if (size == 1 && root) {
+        //cout <<"TREE ONLY HAS ONE NODE. REMOVING: "<< root->priority << endl;
+        delete root;
+        root = NULL;
+        size--;
+        // cout << "SIZE: " << size << endl;
+        return true;
+    }
+    // Case where root node only has one child
+    else if (val.priority == root->priority && !(root->left) != !(root->right)) {
+        //cout <<"ROOT NODE HAS ONE CHILD. REMOVING: " << curr_node->priority<< endl;
+        TaskItem* temp = root;
+        if (curr_node->right) {
+            root = curr_node->right;
+        }
+        else if (curr_node->left) {
+            root = curr_node->left;
+        }
+        delete temp;
+        temp = NULL;
+        size--;
+        //cout << "SIZE: " << size << endl;
+        return true;
+    }
 
-		// move on to next node
-		if(val.priority > cur_root->priority){
-			cur_root = cur_root->right;
-		}else if(val.priority < cur_root->priority){
-			cur_root = cur_root->left;
-		}
-		right_node = cur_root->right;
-		left_node = cur_root->left;
+    // Traverse tree
+    while (curr_node) {
+        // Move to next node
+        // Move right
+        if (val.priority > curr_node->priority) {
+            //cout << "MOVE RIGHT" << endl;
+            parent = curr_node;
+            curr_node = curr_node->right;
+        }
+        // Move left
+        else if (val.priority < curr_node->priority) {
+            //cout << "MOVE LEFT" << endl;
+            parent = curr_node;
+            curr_node = curr_node->left;
+        }
+        
+        // Reached a NULL node
+        if(!(curr_node)){
+            break;
+        }
+        
+        // GENERAL CASES:
+        // Found node to be removed (curr_node)
+        if (val.priority == curr_node->priority) {
+            // Case where curr_node has no children
+            if (curr_node->left==NULL && curr_node->right==NULL) {
+                // cout << curr_node->priority<<" HAS NO CHILDREN" << endl;
+                // cout << "PARENT: " << parent << endl;
+                if (parent->left == curr_node) {
+                    // cout << "REMOVING: " << parent->left->priority << endl;
+                    delete parent->left;
+                    parent->left = NULL;
+                    curr_node = NULL; // curr_node needs to be NULL because it pointed to a dynamically allocated TaskItem that has been deallocated (delete parent->left)
+                }
+                else if (parent->right == curr_node) {
+                    // cout << "REMOVING: " << parent->right->priority << endl;
+                    delete parent->right;
+                    parent->right = NULL;
+                    curr_node = NULL; 
+                }
+                size--;
+                // cout << "SIZE: " << size << endl;
+                return true;
+            }
+            // Case where curr_node has both children
+            else if(curr_node->left && curr_node->right){
+                TaskItem *min = curr_node->right;
+                TaskItem *min_parent = NULL;
+                // cout << curr_node->priority<<" HAS BOTH CHILDREN" << endl;
+                // EDGE CASE where the right tree of curr_node has no children
+                    // replace curr_node with curr_node->right 
+                if(min->left == NULL){
+                    // cout << "REMOVING: " << curr_node->priority<<" AND REPLACING WITH "<<curr_node->right->priority << endl;
+                    // cout << "CURR_NODE RIGHT: " << curr_node->right->priority<<endl;
 
-		if(right_node==NULL && left_node==NULL && cur_root->priority!=val.priority){
-			break;
-		}
-	}
+                    curr_node->priority = curr_node->right->priority;
+                    curr_node->description = curr_node->right->description;
+                    if(curr_node->right->right){
+                       curr_node->right = curr_node->right->right;
+                    }
+                    else{  
+                        delete curr_node->right;
+                        curr_node->right = NULL;
+                    }
+                    size--;
+                    return true;
+                }
+                // GENERAL CASE
+                // Find min of curr_node's right tree (i.e. far left leaf node)
+                while(min->left != NULL){
+                    min_parent = min;
+                    min = min->left;
+                }
+                // cout << "REMOVING: " << curr_node->priority<<" AND REPLACING WITH "<<min->priority << endl;
+                curr_node->priority = min->priority;
+                curr_node->description = min->description;
+                // cout << "CURR_NODE RIGHT: " << curr_node->right->priority<<endl;
+                delete min_parent->left;
+                min_parent->left = NULL;
+                size--;
+                // cout << "SIZE: " << size << endl;
+                return true;
+            }
+            // Case where curr_node has one child
+            else {
+                // curr_node has a left child
+                if(curr_node->left){
+                    // cout << curr_node->priority<<" HAS ONE LEFT CHILD" << endl;
+                    if(curr_node == parent->right){
+                        // cout << "REMOVING: " << parent->right->priority<<" AND REPLACING WITH "<<curr_node->left->priority << endl;
+                        parent->right = curr_node->left;
+                    }
+                    else if(curr_node == parent->left){
+                        // cout << "REMOVING: " << parent->left->priority<<" AND REPLACING WITH "<<curr_node->left->priority << endl;
+                        parent->left = curr_node->left;
+                    }
+                }
+                // curr_node has a right child
+                else if(curr_node->right){
+                    // cout << curr_node->priority<<" HAS ONE RIGHT CHILD" << endl;
+                    if(curr_node == parent->right){
+                        // cout << "REMOVING: " << parent->right->priority<<" AND REPLACING WITH "<<curr_node->right->priority << endl;
+                        parent->right = curr_node->right;
+                    }
+                    else if(curr_node == parent->left){
+                        // cout << "REMOVING: " << parent->left->priority<<" AND REPLACING WITH "<<curr_node->right->priority << endl;
+                        parent->left = curr_node->right;
+                    }
+                }
+                delete curr_node;
+                curr_node = NULL;
+                size--;
+                // cout << "SIZE: " << size << endl;
+                return true;
+            }
+        }
+    }
+
+    // loop exited, node not found
     return false;
 }
