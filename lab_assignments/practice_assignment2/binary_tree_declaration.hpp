@@ -1,8 +1,6 @@
 #ifndef BINARY_TREE_DECLARATION_HPP
 #define BINARY_TREE_DECLARATION_HPP
 
-using namespace std;
-
 class BinaryTreeNode {
     int value;
     BinaryTreeNode* left;
@@ -10,10 +8,14 @@ class BinaryTreeNode {
 
 public:
     BinaryTreeNode();
+    BinaryTreeNode(int new_value);
     ~BinaryTreeNode();
 
     BinaryTreeNode* get_left(); 
     BinaryTreeNode* get_right();
+
+    void set_left(BinaryTreeNode* target); 
+    void set_right(BinaryTreeNode* target);
 
     int get_value();
 
