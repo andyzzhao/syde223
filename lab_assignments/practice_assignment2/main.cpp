@@ -51,13 +51,19 @@ int find_max_sum_of_nodes (BinaryTreeNode* T, int &temp_max_sum) {
     // derive the maximum sum for the right subtree
     int right_sum = find_max_sum_of_nodes(T->get_right(), temp_max_sum);
 
+    int max1, max2;
     // TODO: compare T->value, left_sum + T->value, and right_sum + T->value; store as max1
+    max1 = max(max(T->get_value(), left_sum + T->get_value()), T->get_value() + right_sum);
     
     // TODO: compare max1, left_sum + right_sum + T->value; store as max2
+    max2 = (max1, left_sum + right_sum + T->get_value());
 
     // TODO: update temp_max_sum with the new max
+    if (max2 > temp_max_sum)
+        temp_max_sum = max2;
 
     // TODO: return max1
+    return max1;
 }
 
 int find_max_sum_of_nodes(BinaryTreeNode *T) {
@@ -94,5 +100,8 @@ int main() {
     node5->set_left(node7);
 
     // Call functions
-    find_and_print_sum_of_nodes(node1, 11, 0, "");
+    // find_and_print_sum_of_nodes(node1, 11, 0, "");
+    int globalMax = INT_MIN;
+    find_max_sum_of_nodes(node1, globalMax);
+    cout << globalMax << endl;
 }
