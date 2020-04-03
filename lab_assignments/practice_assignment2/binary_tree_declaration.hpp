@@ -4,7 +4,7 @@
 using namespace std;
 
 class BinaryTreeNode {
-    int data;
+    int value;
     BinaryTreeNode* left;
     BinaryTreeNode* right;
 
@@ -14,5 +14,9 @@ public:
 
     BinaryTreeNode* get_left(); 
     BinaryTreeNode* get_right();
+
+    int get_value();
+
+
 };
 #endif

@@ -2,6 +2,7 @@
 // Andy Zhao (20785698)
 
 #include <iostream>
+#include <binary_tree_declaration.hpp>
 
 using namespace std;
 
@@ -11,10 +12,10 @@ void find_and_print_sum_of_nodes (BinaryTreeNode * T, int desired_sum, int cur_s
     if (!T) return;
 
     // update the ongoing sum with the current value for T
-    int new_sum = cur_sum + T->value;
+    int new_sum = cur_sum + T->get_value();
 
     // update the current path string
-    string new_buffer = buffer + " " + int2ascii(T->value);
+    string new_buffer = buffer + " " + int2ascii(T->get_value());
 
     // if the desired sum is found, print the corresponding path
     if (new_sum == desired_sum) 
@@ -34,10 +35,10 @@ int find_max_sum_of_nodes (BinaryTreeNode* T, int &temp_max_sum) {
     if (!T) return 0;
 
     // derive the maximum sum for the left subtree
-    int left_sum = find_max_sum_of_nodes(T->left, temp_max_sum);
+    int left_sum = find_max_sum_of_nodes(T->get_left(), temp_max_sum);
 
     // derive the maximum sum for the right subtree
-    int right_sum = find_max_sum_of_nodes(T->right, temp_max_sum);
+    int right_sum = find_max_sum_of_nodes(T->get_right(), temp_max_sum);
 
     // TODO: compare T->value, left_sum + T->value, and right_sum + T->value; store as max1
     
@@ -58,5 +59,5 @@ int find_max_sum_of_nodes(BinaryTreeNode *T) {
 
 
 int main() {
-    
+
 }

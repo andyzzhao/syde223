@@ -12,3 +12,7 @@ BinaryTreeNode* BinaryTreeNode::get_right() {
     return right;
 }
 
+int BinaryTreeNode::get_value() {
+    return value;
+}
+
