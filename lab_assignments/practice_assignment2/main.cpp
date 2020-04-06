@@ -75,6 +75,16 @@ int find_max_sum_of_nodes(BinaryTreeNode *T) {
     return temp_max_sum;
 }
 
+void delete_tree(BinaryTreeNode* node){  
+    if (node == NULL) return;  
+  
+    delete_tree(node->left);  
+    delete_tree(node->right);  
+      
+    //cout << "\n Deleting node: " << node->get_value();  
+    node = NULL;  
+} 
+
 class TreeAlgorithmTests{
 public:
     // PURPOSE: test find_and_print_sum_of_nodes
@@ -99,6 +109,7 @@ public:
         node5->set_left(node7);
 
         find_and_print_sum_of_nodes(node1, 11, 0, "");
+        delete_tree(node1);
         return;
     }
     // PURPOSE: test find_and_print_sum_of_nodes
@@ -123,6 +134,7 @@ public:
         node5->set_left(node7);
 
         find_and_print_sum_of_nodes(node1, 6, 0, "");
+        delete_tree(node1);
         return;
     }
     // PURPOSE: test find_and_print_sum_of_nodes
@@ -154,6 +166,7 @@ public:
 
         // Call functions
         find_and_print_sum_of_nodes(node1, 5, 0, "");
+        delete_tree(node1);
         return;
     }
 
@@ -182,6 +195,7 @@ public:
         
         find_max_sum_of_nodes(node5, globalMax);
         cout << globalMax << endl;
+        delete_tree(node5);
         return;
     }
     void test2b(){
@@ -201,6 +215,7 @@ public:
         
         find_max_sum_of_nodes(node8, globalMax);
         cout << globalMax << endl;
+        delete_tree(node8);
         return;
     }
     void test2c(){
@@ -215,7 +230,7 @@ public:
 
         find_max_sum_of_nodes(node20, globalMax);
         cout << globalMax << endl;
-
+        delete_tree(node20);
         return;
     }
 };
@@ -244,7 +259,7 @@ int main() {
 
     // find_max_sum_of_nodes test
     cout << "TEST 2A RESULTS" << endl;
-    cout << "EXPECTED: 24 " << endl;
+    cout << "EXPECTED: 23" << endl;
     cout << "ACTUAL: ";
     tree_tests.test2a();
     cout << endl;

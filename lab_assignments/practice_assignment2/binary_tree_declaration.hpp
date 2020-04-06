@@ -18,7 +18,7 @@ public:
     void set_right(BinaryTreeNode* target);
 
     int get_value();
-
+    friend void delete_tree(BinaryTreeNode* node);
 
 };
 #endif
